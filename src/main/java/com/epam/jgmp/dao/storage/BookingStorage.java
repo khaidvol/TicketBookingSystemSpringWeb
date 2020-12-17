@@ -1,9 +1,8 @@
-package com.epam.jgmp.storage;
+package com.epam.jgmp.dao.storage;
 
-import com.epam.jgmp.model.*;
-import com.epam.jgmp.model.implementation.EventImpl;
-import com.epam.jgmp.model.implementation.TicketImpl;
-import com.epam.jgmp.model.implementation.UserImpl;
+import com.epam.jgmp.dao.model.Event;
+import com.epam.jgmp.dao.model.Ticket;
+import com.epam.jgmp.dao.model.User;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,14 +45,14 @@ public class BookingStorage {
 
         switch (line[0]) {
           case "User":
-            User user = new UserImpl(line[1], line[2]);
+            User user = new User(line[1], line[2]);
             user.setId(Integer.parseInt(line[3]));
             users.put(user.getId(), user);
             logger.info("User loaded from file: " + user.toString());
             break;
 
           case "Event":
-            Event event = new EventImpl(line[1], new SimpleDateFormat("yyyy-MM-dd").parse(line[2]));
+            Event event = new Event(line[1], new SimpleDateFormat("yyyy-MM-dd").parse(line[2]));
             event.setId(Integer.parseInt(line[3]));
             events.put(event.getId(), event);
             logger.info("Event loaded from file: " + event.toString());
@@ -61,7 +60,7 @@ public class BookingStorage {
 
           case "Ticket":
             Ticket ticket =
-                new TicketImpl(
+                new Ticket(
                     Integer.parseInt(line[1]),
                     Integer.parseInt(line[2]),
                     Integer.parseInt(line[3]),

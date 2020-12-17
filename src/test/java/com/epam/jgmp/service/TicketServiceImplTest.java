@@ -2,11 +2,11 @@ package com.epam.jgmp.service;
 
 
 import com.epam.jgmp.config.TestConfig;
+import com.epam.jgmp.dao.model.Event;
+import com.epam.jgmp.dao.model.Ticket;
+import com.epam.jgmp.dao.model.User;
+import com.epam.jgmp.dao.storage.BookingStorage;
 import com.epam.jgmp.exception.ApplicationException;
-import com.epam.jgmp.model.Event;
-import com.epam.jgmp.model.Ticket;
-import com.epam.jgmp.model.User;
-import com.epam.jgmp.storage.BookingStorage;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,14 +15,14 @@ import org.mockito.Mockito;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-public class TicketServiceTest {
+public class TicketServiceImplTest {
 
   ApplicationContext context;
   BookingStorage bookingStorage;
   TicketService ticketService;
   Ticket ticket;
 
-  public TicketServiceTest() {}
+  public TicketServiceImplTest() {}
 
   @Before
   public void setUp() {

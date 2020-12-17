@@ -1,9 +1,9 @@
 package com.epam.jgmp.service;
 
 import com.epam.jgmp.config.TestConfig;
+import com.epam.jgmp.dao.model.Event;
+import com.epam.jgmp.dao.storage.BookingStorage;
 import com.epam.jgmp.exception.ApplicationException;
-import com.epam.jgmp.model.Event;
-import com.epam.jgmp.storage.BookingStorage;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -16,14 +16,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class EventServiceTest {
+public class EventServiceImplTest {
 
   ApplicationContext context;
   BookingStorage bookingStorage;
   EventService eventService;
   Event event;
 
-  public EventServiceTest() {}
+  public EventServiceImplTest() {}
 
   @Before
   public void setUp() {

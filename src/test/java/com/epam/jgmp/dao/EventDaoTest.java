@@ -2,8 +2,8 @@ package com.epam.jgmp.dao;
 
 import com.epam.jgmp.config.TestConfig;
 import com.epam.jgmp.dao.implementation.EventDao;
-import com.epam.jgmp.model.Event;
-import com.epam.jgmp.storage.BookingStorage;
+import com.epam.jgmp.dao.model.Event;
+import com.epam.jgmp.dao.storage.BookingStorage;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

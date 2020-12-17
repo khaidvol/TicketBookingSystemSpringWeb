@@ -1,4 +1,4 @@
-package com.epam.jgmp.xml;
+package com.epam.jgmp.service.xml;
 
 import com.epam.jgmp.config.TestConfig;
 import org.junit.Assert;

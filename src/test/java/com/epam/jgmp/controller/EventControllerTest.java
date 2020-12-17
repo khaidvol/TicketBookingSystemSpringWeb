@@ -1,9 +1,10 @@
 package com.epam.jgmp.controller;
 
 import com.epam.jgmp.config.TbsApplicationConfig;
+import com.epam.jgmp.dao.model.Event;
 import com.epam.jgmp.facade.BookingFacade;
-import com.epam.jgmp.model.Event;
-import com.epam.jgmp.model.implementation.EventImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +13,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,7 +24,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasToString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -35,18 +36,27 @@ public class EventControllerTest {
   @MockBean private BookingFacade bookingFacade;
 
   private Event event;
-  List<Event> events;
+  private List<Event> events;
+
+  private ObjectMapper objectMapper;
+  private ObjectNode objectNode;
 
   @Before
   public void setUp() throws ParseException {
+
+    objectMapper = new ObjectMapper();
+    objectNode = objectMapper.createObjectNode();
+
     long id = 1L;
     String title = "TestEvent";
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     String dateInString = "2020-12-12";
     Date date = formatter.parse(dateInString);
-    event = new EventImpl(title, date);
+
+    event = new Event(title, date);
     event.setId(id);
     events = Collections.singletonList(event);
+
     Mockito.when(bookingFacade.getEventById(id)).thenReturn(event);
     Mockito.when(
             bookingFacade.getEventsForDay(
@@ -62,9 +72,8 @@ public class EventControllerTest {
 
   @Test
   public void getEventById() throws Exception {
-    long id = 1L;
     this.mockMvc
-        .perform(get("/event/id?id={id}", id))
+        .perform(get("/event/id?id={id}", event.getId()))
         .andExpect(status().isOk())
         .andExpect(view().name("eventTemplate"))
         .andExpect(model().attributeExists("result"))
@@ -75,7 +84,7 @@ public class EventControllerTest {
   public void getEventsByTitle() throws Exception {
     String title = "TestEvent";
     this.mockMvc
-        .perform(get("/event/title?title={title}&pageSize=1&pageNum=1", title))
+        .perform(get("/event/title?title={title}&pageSize=1&pageNum=1", event.getTitle()))
         .andExpect(status().isOk())
         .andExpect(view().name("eventTemplate"))
         .andExpect(model().attributeExists("result"))
@@ -95,40 +104,40 @@ public class EventControllerTest {
 
   @Test
   public void createEvent() throws Exception {
-    String title = "TestEvent";
-    String day = "2020-12-12";
+
+    objectNode.put("title", event.getTitle());
+    objectNode.put("day", event.getDate().toString());
+
     this.mockMvc
-        .perform(post("/event/new?title={title}&day={day}", title, day))
+        .perform(
+            post("/event/new")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectNode.toString()))
         .andExpect(status().isOk())
-        .andExpect(view().name("eventTemplate"))
-        .andExpect(model().attributeExists("result"))
-        .andExpect(
-            model().attribute("result", hasToString("Event created: ".concat(event.toString()))));
+        .andReturn();
   }
 
   @Test
   public void updateEvent() throws Exception {
-    long id = 1L;
-    String title = "TestEvent";
-    String day = "2020-12-12";
+
+    objectNode.put("id", event.getId());
+    objectNode.put("title", event.getTitle());
+    objectNode.put("day", event.getDate().toString());
+
     this.mockMvc
-        .perform(put("/event/update?id={id}&title={title}&day={day}", id, title, day))
+        .perform(
+            put("/event/update/{id}", event.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectNode.toString()))
         .andExpect(status().isOk())
-        .andExpect(view().name("eventTemplate"))
-        .andExpect(model().attributeExists("result"))
-        .andExpect(
-            model().attribute("result", hasToString("Event updated: ".concat(event.toString()))));
+        .andReturn();
   }
 
   @Test
   public void deleteEvent() throws Exception {
-    long id = 1L;
     this.mockMvc
-        .perform(delete(String.format("/event/delete?id=%s", id)))
+        .perform(delete("/event/delete/{id}", event.getId()))
         .andExpect(status().isOk())
-        .andExpect(view().name("eventTemplate"))
-        .andExpect(model().attributeExists("result"))
-        .andExpect(
-            model().attribute("result", hasToString(String.format("Event #%s deleted: true", id))));
+        .andReturn();
   }
 }

@@ -1,8 +1,8 @@
 package com.epam.jgmp.dao.implementation;
 
 import com.epam.jgmp.dao.Dao;
-import com.epam.jgmp.model.Ticket;
-import com.epam.jgmp.storage.BookingStorage;
+import com.epam.jgmp.dao.model.Ticket;
+import com.epam.jgmp.dao.storage.BookingStorage;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

@@ -1,14 +1,12 @@
 package com.epam.jgmp.integration;
 
 import com.epam.jgmp.config.TestConfig;
+import com.epam.jgmp.dao.model.Event;
+import com.epam.jgmp.dao.model.Ticket;
+import com.epam.jgmp.dao.model.User;
+import com.epam.jgmp.dao.storage.BookingStorage;
 import com.epam.jgmp.facade.BookingFacade;
 import com.epam.jgmp.facade.BookingFacadeImpl;
-import com.epam.jgmp.model.Event;
-import com.epam.jgmp.model.Ticket;
-import com.epam.jgmp.model.User;
-import com.epam.jgmp.model.implementation.EventImpl;
-import com.epam.jgmp.model.implementation.UserImpl;
-import com.epam.jgmp.storage.BookingStorage;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,7 +18,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static com.epam.jgmp.model.Ticket.Category.*;
+import static com.epam.jgmp.dao.model.Ticket.Category.*;
 
 public class IntegrationTest {
 
@@ -38,11 +36,11 @@ public class IntegrationTest {
 
   @Test
   public void testIntegrationScenario() {
-    User userAlfred = bookingFacade.createUser(new UserImpl("Alfred", "alfred@gmail.com"));
-    User userRobert = bookingFacade.createUser(new UserImpl("Robert", "robert@gmail.com"));
-    User userWilliam = bookingFacade.createUser(new UserImpl("William", "william@gmail.com"));
+    User userAlfred = bookingFacade.createUser(new User("Alfred", "alfred@gmail.com"));
+    User userRobert = bookingFacade.createUser(new User("Robert", "robert@gmail.com"));
+    User userWilliam = bookingFacade.createUser(new User("William", "william@gmail.com"));
 
-    Event event1 = bookingFacade.createEvent(new EventImpl("Dancing Show", new Date()));
+    Event event1 = bookingFacade.createEvent(new Event("Dancing Show", new Date()));
 
     Ticket ticket1 = bookingFacade.bookTicket(userAlfred.getId(), event1.getId(), 1, STANDARD);
     Ticket ticket2 = bookingFacade.bookTicket(userAlfred.getId(), event1.getId(), 2, PREMIUM);

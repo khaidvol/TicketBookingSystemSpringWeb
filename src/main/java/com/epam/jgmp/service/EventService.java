@@ -1,113 +1,62 @@
 package com.epam.jgmp.service;
 
-import com.epam.jgmp.dao.Dao;
-import com.epam.jgmp.exception.ApplicationException;
-import com.epam.jgmp.model.Event;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
+import com.epam.jgmp.dao.model.Event;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-@Service
-public class EventService {
+/** Operations related to event service */
+public interface EventService {
 
-  private static final Log LOGGER = LogFactory.getLog(EventService.class);
-  private final Dao<Event> eventDao;
+    /**
+     * Gets event by its id.
+     *
+     * @return Event.
+     */
+    Event getEventById(long eventId);
 
-  // constructor-injection
-  private EventService(Dao<Event> eventDao) {
-    this.eventDao = eventDao;
-  }
+    /**
+     * Get list of events by matching title. Title is matched using 'contains' approach. In case
+     * nothing was found, empty list is returned.
+     *
+     * @param title Event title or it's part.
+     * @param pageSize Pagination param. Number of events to return on a page.
+     * @param pageNum Pagination param. Number of the page to return. Starts from 1.
+     * @return List of events.
+     */
+    List<Event> getEventsByTitle(String title, int pageSize, int pageNum);
 
-  public Event getEventById(long eventId) {
+    /**
+     * Get list of events for specified day. In case nothing was found, empty list is returned.
+     *
+     * @param day Date object from which day information is extracted.
+     * @param pageSize Pagination param. Number of events to return on a page.
+     * @param pageNum Pagination param. Number of the page to return. Starts from 1.
+     * @return List of events.
+     */
+    List<Event> getEventsForDay(Date day, int pageSize, int pageNum);
 
-    Event event = eventDao.read(eventId);
+    /**
+     * Creates new event. Event id should be auto-generated.
+     *
+     * @param event Event data.
+     * @return Created Event object.
+     */
+    Event createEvent(Event event);
 
-    if (event == null) {
-      LOGGER.error("Event not found.");
-      throw new ApplicationException("Event not found", HttpStatus.NOT_FOUND);
-    }
+    /**
+     * Updates event using given data.
+     *
+     * @param event Event data for update. Should have id set.
+     * @return Updated Event object.
+     */
+    Event updateEvent(Event event);
 
-    LOGGER.info("Event found: " + event.toString());
-
-    return event;
-  }
-
-  public List<Event> getEventsByTitle(String title, int pageSize, int pageNum) {
-
-    List<Event> foundEvents = new ArrayList<>();
-
-    for (Event event : eventDao.readAll()) {
-      if (event.getTitle().contains(title)) {
-        foundEvents.add(event);
-      }
-    }
-
-    LOGGER.info(String.format("%s event(s) found: ", foundEvents.size()));
-    foundEvents.forEach(LOGGER::info);
-
-    return foundEvents;
-  }
-
-  public List<Event> getEventsForDay(Date day, int pageSize, int pageNum) {
-
-    List<Event> foundEvents = new ArrayList<>();
-
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTime(day);
-    int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-
-    for (Event event : eventDao.readAll()) {
-      calendar.setTime(event.getDate());
-
-      if (calendar.get(Calendar.DAY_OF_WEEK) == dayOfWeek) {
-        foundEvents.add(event);
-      }
-    }
-
-    LOGGER.info(String.format("%s event(s) found: ", foundEvents.size()));
-    foundEvents.forEach(LOGGER::info);
-
-    return foundEvents;
-  }
-
-  public Event createEvent(Event event) {
-
-    event.setId(eventDao.getMaxId() + 1);
-    eventDao.create(event);
-    LOGGER.info("Event created successfully. Event details: " + event.toString());
-
-    return eventDao.read(event.getId());
-  }
-
-  public Event updateEvent(Event event) {
-
-    if (eventDao.read(event.getId()) == null) {
-      LOGGER.error("Event not updated because of not found.");
-      throw new ApplicationException("Event not updated", HttpStatus.NOT_FOUND);
-    }
-
-    eventDao.update(event);
-    LOGGER.info("Event updated successfully. Event details: " + event.toString());
-
-    return eventDao.read(event.getId());
-  }
-
-  public boolean deleteEvent(long eventId) {
-
-    boolean isEventDeleted = false;
-
-    if (eventDao.read(eventId) != null) {
-      eventDao.delete(eventId);
-      isEventDeleted = true;
-    }
-    LOGGER.info("Event deleted: " + isEventDeleted);
-
-    return isEventDeleted;
-  }
+    /**
+     * Deletes event by its id.
+     *
+     * @param eventId Event id.
+     * @return Flag that shows whether event has been deleted.
+     */
+    boolean deleteEvent(long eventId);
 }

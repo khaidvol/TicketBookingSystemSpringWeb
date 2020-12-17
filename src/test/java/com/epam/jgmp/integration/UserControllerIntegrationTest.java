@@ -22,7 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerIntegrationTest {
 
   @Autowired private MockMvc mockMvc;
-
   @Autowired private BookingFacade bookingFacade;
 
   @Test

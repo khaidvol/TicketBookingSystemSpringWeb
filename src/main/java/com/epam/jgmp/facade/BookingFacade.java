@@ -1,9 +1,9 @@
 package com.epam.jgmp.facade;
 
 
-import com.epam.jgmp.model.Event;
-import com.epam.jgmp.model.Ticket;
-import com.epam.jgmp.model.User;
+import com.epam.jgmp.dao.model.Event;
+import com.epam.jgmp.dao.model.Ticket;
+import com.epam.jgmp.dao.model.User;
 
 import java.util.Date;
 import java.util.List;

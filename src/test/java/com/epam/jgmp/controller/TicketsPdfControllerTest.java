@@ -1,10 +1,9 @@
 package com.epam.jgmp.controller;
 
 import com.epam.jgmp.config.TbsApplicationConfig;
+import com.epam.jgmp.dao.model.Ticket;
+import com.epam.jgmp.dao.model.User;
 import com.epam.jgmp.facade.BookingFacade;
-import com.epam.jgmp.model.Ticket;
-import com.epam.jgmp.model.User;
-import com.epam.jgmp.model.implementation.TicketImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,7 +43,7 @@ public class TicketsPdfControllerTest {
     int place = 1;
     Ticket.Category category = Ticket.Category.STANDARD;
 
-    ticket = new TicketImpl(userId, eventId, place, category);
+    ticket = new Ticket(userId, eventId, place, category);
     ticket.setId(ticketId);
 
     tickets = Collections.singletonList(ticket);

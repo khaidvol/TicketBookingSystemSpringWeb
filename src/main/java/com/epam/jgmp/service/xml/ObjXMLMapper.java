@@ -1,4 +1,4 @@
-package com.epam.jgmp.xml;
+package com.epam.jgmp.service.xml;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;

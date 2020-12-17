@@ -1,6 +1,6 @@
-package com.epam.jgmp.pdf;
+package com.epam.jgmp.service.pdf;
 
-import com.epam.jgmp.model.Ticket;
+import com.epam.jgmp.dao.model.Ticket;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;

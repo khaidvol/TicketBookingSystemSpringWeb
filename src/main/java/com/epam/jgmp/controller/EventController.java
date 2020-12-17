@@ -1,107 +1,74 @@
 package com.epam.jgmp.controller;
 
+import com.epam.jgmp.dao.model.Event;
 import com.epam.jgmp.facade.BookingFacade;
-import com.epam.jgmp.model.Event;
-import com.epam.jgmp.model.implementation.EventImpl;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Date;
-import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/event")
 public class EventController {
 
   public static final String RESULT = "result";
   public static final String EVENT_TEMPLATE = "eventTemplate";
-  private BookingFacade bookingFacade;
+  private final BookingFacade bookingFacade;
 
   public EventController(BookingFacade bookingFacade) {
     this.bookingFacade = bookingFacade;
   }
 
   @GetMapping("/id")
-  public ModelAndView getEventById(@RequestParam(value = "id", required = true) Long id) {
+  public ModelAndView getEventById(@RequestParam(value = "id") Long id) {
 
-    Event event = bookingFacade.getEventById(id);
-
-    ModelAndView modelAndView = new ModelAndView(EVENT_TEMPLATE);
-    modelAndView.addObject(RESULT, event);
-
-    return modelAndView;
+    return new ModelAndView(EVENT_TEMPLATE, RESULT, bookingFacade.getEventById(id));
   }
 
   @GetMapping("/title")
   public ModelAndView getEventsByTitle(
-      @RequestParam(value = "title", required = true) String title,
-      @RequestParam(value = "pageSize", required = true) int pageSize,
-      @RequestParam(value = "pageNum", required = true) int pageNum) {
+      @RequestParam(value = "title") String title,
+      @RequestParam(value = "pageSize") int pageSize,
+      @RequestParam(value = "pageNum") int pageNum) {
 
-    List<Event> events = bookingFacade.getEventsByTitle(title, pageSize, pageNum);
-
-    ModelAndView modelAndView = new ModelAndView(EVENT_TEMPLATE);
-    modelAndView.addObject(RESULT, events);
-
-    return modelAndView;
+    return new ModelAndView(
+        EVENT_TEMPLATE, RESULT, bookingFacade.getEventsByTitle(title, pageSize, pageNum));
   }
 
   @GetMapping("/day")
   public ModelAndView getEventsForDay(
-      @RequestParam(value = "day", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-          Date day,
-      @RequestParam(value = "pageSize", required = true) int pageSize,
-      @RequestParam(value = "pageNum", required = true) int pageNum) {
+      @RequestParam(value = "day") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date day,
+      @RequestParam(value = "pageSize") int pageSize,
+      @RequestParam(value = "pageNum") int pageNum) {
 
-    List<Event> events = bookingFacade.getEventsForDay(day, pageSize, pageNum);
-
-    ModelAndView modelAndView = new ModelAndView(EVENT_TEMPLATE);
-    modelAndView.addObject(RESULT, events);
-
-    return modelAndView;
+    return new ModelAndView(
+        EVENT_TEMPLATE, RESULT, bookingFacade.getEventsForDay(day, pageSize, pageNum));
   }
 
   @PostMapping("/new")
-  public String createEvent(
-      @RequestParam(value = "title", required = true) String title,
-      @RequestParam(value = "day", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-          Date day,
-      Model model) {
+  public Event createEvent(@RequestBody Event event) {
 
-    Event event = new EventImpl(title, day);
-    event = bookingFacade.createEvent(event);
-
-    model.addAttribute(RESULT, "Event created: ".concat(event.toString()));
-
-    return EVENT_TEMPLATE;
+    return bookingFacade.createEvent(event);
   }
 
-  @PutMapping("/update")
-  public String updateEvent(
-      @RequestParam(value = "id", required = true) Long id,
-      @RequestParam(value = "title", required = true) String title,
-      @RequestParam(value = "day", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-          Date day,
-      Model model) {
+  @PutMapping("/update/{id}")
+  public Event updateEvent(@RequestBody Event event, @PathVariable Long id) {
 
-    Event event = new EventImpl(id, title, day);
-    event = bookingFacade.updateEvent(event);
-
-    model.addAttribute(RESULT, "Event updated: ".concat(event.toString()));
-
-    return EVENT_TEMPLATE;
+    event.setId(id);
+    return bookingFacade.updateEvent(event);
   }
 
-  @DeleteMapping("/delete")
-  public String deleteEvent(@RequestParam(value = "id", required = true) Long id, Model model) {
+  @DeleteMapping("/delete/{id}")
+  public ResponseEntity<Long> deleteEvent(@PathVariable Long id) {
 
-    Boolean deleteResult = bookingFacade.deleteEvent(id);
+    boolean isDeleted = bookingFacade.deleteEvent(id);
 
-    model.addAttribute(RESULT, String.format("Event #%s deleted: %s", id, deleteResult));
-
-    return EVENT_TEMPLATE;
+    if (!isDeleted) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<>(id, HttpStatus.OK);
   }
 }

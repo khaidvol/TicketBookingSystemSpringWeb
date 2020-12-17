@@ -1,6 +1,6 @@
-package com.epam.jgmp.xml;
+package com.epam.jgmp.service.xml;
 
-import com.epam.jgmp.model.Ticket;
+import com.epam.jgmp.dao.model.Ticket;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;

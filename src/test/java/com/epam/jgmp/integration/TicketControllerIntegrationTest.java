@@ -1,9 +1,9 @@
 package com.epam.jgmp.integration;
 
 import com.epam.jgmp.config.TbsApplicationConfig;
+import com.epam.jgmp.dao.model.Ticket;
+import com.epam.jgmp.dao.model.User;
 import com.epam.jgmp.facade.BookingFacade;
-import com.epam.jgmp.model.Ticket;
-import com.epam.jgmp.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,16 +89,5 @@ public class TicketControllerIntegrationTest {
         .andExpect(
             model()
                 .attribute("result", hasToString(String.format("Ticket #%s canceled: true", id))));
-  }
-
-  @Test
-  public void preloadTicket() throws Exception {
-
-    this.mockMvc
-        .perform(get("/ticket/preload"))
-        .andExpect(status().isOk())
-        .andExpect(view().name("ticketTemplate"))
-        .andExpect(model().attributeExists("result"))
-        .andExpect(model().attribute("result", hasToString("Tickets preloaded")));
   }
 }

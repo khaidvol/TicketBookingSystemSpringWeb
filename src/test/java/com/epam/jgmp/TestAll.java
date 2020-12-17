@@ -11,11 +11,11 @@ import com.epam.jgmp.integration.EventControllerIntegrationTest;
 import com.epam.jgmp.integration.IntegrationTest;
 import com.epam.jgmp.integration.TicketControllerIntegrationTest;
 import com.epam.jgmp.integration.UserControllerIntegrationTest;
-import com.epam.jgmp.pdf.TicketsPdfBuilderTest;
-import com.epam.jgmp.service.EventServiceTest;
-import com.epam.jgmp.service.TicketServiceTest;
-import com.epam.jgmp.service.UserServiceTest;
-import com.epam.jgmp.xml.ObjXMLMapperTest;
+import com.epam.jgmp.service.EventServiceImplTest;
+import com.epam.jgmp.service.TicketServiceImplTest;
+import com.epam.jgmp.service.UserServiceImplTest;
+import com.epam.jgmp.service.pdf.TicketsPdfBuilderTest;
+import com.epam.jgmp.service.xml.ObjXMLMapperTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -24,9 +24,9 @@ import org.junit.runners.Suite;
   UserDaoTest.class,
   EventDaoTest.class,
   TicketDaoTest.class,
-  UserServiceTest.class,
-  EventServiceTest.class,
-  TicketServiceTest.class,
+  UserServiceImplTest.class,
+  EventServiceImplTest.class,
+  TicketServiceImplTest.class,
   IntegrationTest.class,
   ObjXMLMapperTest.class,
   TicketsPdfBuilderTest.class,

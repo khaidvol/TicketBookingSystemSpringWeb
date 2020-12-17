@@ -1,9 +1,9 @@
 package com.epam.jgmp.service;
 
 import com.epam.jgmp.config.TestConfig;
+import com.epam.jgmp.dao.model.User;
+import com.epam.jgmp.dao.storage.BookingStorage;
 import com.epam.jgmp.exception.ApplicationException;
-import com.epam.jgmp.model.User;
-import com.epam.jgmp.storage.BookingStorage;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,14 +12,14 @@ import org.mockito.Mockito;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-public class UserServiceTest {
+public class UserServiceImplTest {
 
   ApplicationContext context;
   BookingStorage bookingStorage;
   UserService userService;
   User user;
 
-  public UserServiceTest() {}
+  public UserServiceImplTest() {}
 
   @Before
   public void setUp() {

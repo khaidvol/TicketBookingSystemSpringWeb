@@ -1,8 +1,8 @@
 package com.epam.jgmp.config;
 
-import com.epam.jgmp.xml.ObjXMLMapper;
-import com.epam.jgmp.xml.XMLTicket;
-import com.epam.jgmp.xml.XMLTicketListContainer;
+import com.epam.jgmp.service.xml.ObjXMLMapper;
+import com.epam.jgmp.service.xml.XMLTicket;
+import com.epam.jgmp.service.xml.XMLTicketListContainer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -63,7 +63,6 @@ public class TbsApplicationConfig extends WebMvcConfigurationSupport {
   }
 
   /** XML to Object Mapping configuration */
-
   @Bean
   public Jaxb2Marshaller jaxb2Marshaller() {
     Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
