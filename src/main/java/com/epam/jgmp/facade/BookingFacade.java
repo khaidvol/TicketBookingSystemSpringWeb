@@ -1,6 +1,5 @@
 package com.epam.jgmp.facade;
 
-
 import com.epam.jgmp.dao.model.Event;
 import com.epam.jgmp.dao.model.Ticket;
 import com.epam.jgmp.dao.model.User;
@@ -154,11 +153,6 @@ public interface BookingFacade {
    */
   boolean cancelTicket(long ticketId);
 
-  /**
-   * Preload tickets from xml file.
-   */
+  /** Preload tickets from xml file. */
   public void preloadTickets();
 }
-
-
-

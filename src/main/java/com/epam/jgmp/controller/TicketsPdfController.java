@@ -25,11 +25,11 @@ public class TicketsPdfController {
 
   @GetMapping(value = "/pdf")
   public ModelAndView getBookedTickets(
-      @RequestParam(value = "id", required = true) Long id,
-      @RequestParam(value = "name", required = true) String name,
-      @RequestParam(value = "email", required = true) String email,
-      @RequestParam(value = "pageSize", required = true) int pageSize,
-      @RequestParam(value = "pageNum", required = true) int pageNum) {
+      @RequestParam(value = "id") Long id,
+      @RequestParam(value = "name") String name,
+      @RequestParam(value = "email") String email,
+      @RequestParam(value = "pageSize") int pageSize,
+      @RequestParam(value = "pageNum") int pageNum) {
 
     User user = new User(id, name, email);
     List<Ticket> tickets = bookingFacade.getBookedTickets(user, pageSize, pageNum);

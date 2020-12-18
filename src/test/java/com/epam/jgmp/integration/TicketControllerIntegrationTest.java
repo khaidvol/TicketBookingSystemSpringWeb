@@ -4,16 +4,21 @@ import com.epam.jgmp.config.TbsApplicationConfig;
 import com.epam.jgmp.dao.model.Ticket;
 import com.epam.jgmp.dao.model.User;
 import com.epam.jgmp.facade.BookingFacade;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.hasToString;
+import java.text.ParseException;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -26,32 +31,31 @@ public class TicketControllerIntegrationTest {
   @Autowired private MockMvc mockMvc;
   @Autowired private BookingFacade bookingFacade;
 
+  private ObjectMapper objectMapper;
+  private ObjectNode objectNode;
+
+  @Before
+  public void setUp() throws ParseException {
+
+    objectMapper = new ObjectMapper();
+    objectNode = objectMapper.createObjectNode();
+  }
+
   @Test
   public void bookTicket() throws Exception {
 
-    long userId = 4L;
-    long eventId = 1L;
-    int place = 666;
-    Ticket.Category category = Ticket.Category.STANDARD;
+    objectNode.put("userId", 1L);
+    objectNode.put("eventId", 1L);
+    objectNode.put("place", 666);
+    objectNode.put("category", Ticket.Category.STANDARD.toString());
 
     this.mockMvc
         .perform(
-            post(
-                "/ticket/book?userId={userId}&eventId={eventId}&place={place}&category={category}",
-                userId,
-                eventId,
-                place,
-                category))
+            post("/ticket/book")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectNode.toString()))
         .andExpect(status().isOk())
-        .andExpect(view().name("ticketTemplate"))
-        .andExpect(model().attributeExists("result"))
-        .andExpect(
-            model()
-                .attribute(
-                    "result",
-                    bookingFacade
-                        .getBookedTickets(bookingFacade.getUserById(userId), 1, 1)
-                        .get(0)));
+        .andReturn();
   }
 
   @Test
@@ -79,15 +83,6 @@ public class TicketControllerIntegrationTest {
   @Test
   public void cancelTicket() throws Exception {
 
-    long id = 2L;
-
-    this.mockMvc
-        .perform(delete("/ticket/cancel?id={id}", id))
-        .andExpect(status().isOk())
-        .andExpect(view().name("ticketTemplate"))
-        .andExpect(model().attributeExists("result"))
-        .andExpect(
-            model()
-                .attribute("result", hasToString(String.format("Ticket #%s canceled: true", id))));
+    this.mockMvc.perform(delete("/ticket/cancel/{id}", 2L)).andExpect(status().isOk()).andReturn();
   }
 }

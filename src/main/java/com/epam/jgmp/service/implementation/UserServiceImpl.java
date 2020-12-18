@@ -1,6 +1,5 @@
 package com.epam.jgmp.service.implementation;
 
-
 import com.epam.jgmp.dao.Dao;
 import com.epam.jgmp.dao.model.User;
 import com.epam.jgmp.exception.ApplicationException;

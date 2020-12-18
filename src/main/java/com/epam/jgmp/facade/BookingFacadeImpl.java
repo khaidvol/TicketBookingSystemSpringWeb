@@ -8,7 +8,6 @@ import com.epam.jgmp.service.TicketService;
 import com.epam.jgmp.service.UserService;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.List;
 
@@ -25,11 +24,6 @@ public class BookingFacadeImpl implements BookingFacade {
     this.userService = userService;
     this.eventService = eventService;
     this.ticketService = ticketService;
-  }
-
-  @PostConstruct
-  private void init(){
-    preloadTickets();
   }
 
   @Override
