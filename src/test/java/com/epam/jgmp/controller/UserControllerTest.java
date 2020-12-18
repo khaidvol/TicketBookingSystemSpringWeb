@@ -82,7 +82,6 @@ public class UserControllerTest {
 
   @Test
   public void getUsersByName() throws Exception {
-    String name = "TestUser";
     this.mockMvc
         .perform(get("/user/name?name={name}&pageSize=1&pageNum=1", user.getName()))
         .andExpect(status().isOk())

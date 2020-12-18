@@ -82,7 +82,6 @@ public class EventControllerTest {
 
   @Test
   public void getEventsByTitle() throws Exception {
-    String title = "TestEvent";
     this.mockMvc
         .perform(get("/event/title?title={title}&pageSize=1&pageNum=1", event.getTitle()))
         .andExpect(status().isOk())
